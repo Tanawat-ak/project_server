@@ -50,7 +50,7 @@ app.post('/login', (req, res) => {
     });
 });
 
-// ------------- feature search --------------!!!
+// ------------- feature search --------------
 app.get('/search', (req, res) => {
     const { user_id, keyword } = req.query;
 
