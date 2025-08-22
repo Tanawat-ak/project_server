@@ -54,7 +54,19 @@ app.post('/login', (req, res) => {
 
 
 // ------------- feature add --------------
+app.post('/expenses', (req, res) => {
+    const { user_id, amount, description } = req.body;
 
+    if (!user_id || !amount || !description) {
+        return res.status(400).send("Missing required fields");
+    }
+
+    const sql = "INSERT INTO expense (user_id, amount, description) VALUES (?, ?, ?)";
+    con.query(sql, [user_id, amount, description], (err, results) => {
+        if (err) return res.status(500).send("Database error!");
+        res.status(201).send("New Expense added successfully");
+    });
+});
 
 // ------------- feature delete --------------
 
