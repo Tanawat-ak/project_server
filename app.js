@@ -57,8 +57,26 @@ app.post('/login', (req, res) => {
 
 
 // ------------- feature delete --------------
+app.delete('/expenses/:id', (req, res) => {
+  const expenseId = parseInt(req.params.id);
+  const userId = parseInt(req.body.user_id);
 
+  console.log("Deleting expense:", expenseId, "for user:", userId);
 
+  const sql = "DELETE FROM expense WHERE id = ? AND user_id = ?";
+  con.query(sql, [expenseId, userId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Server error" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Expense not found or unauthorized" });
+    }
+
+    res.json({ message: "Deleted!" });
+  });
+});
 
 // ---------- Server starts here ---------
 const PORT = 3000;
