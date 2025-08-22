@@ -51,7 +51,21 @@ app.post('/login', (req, res) => {
 });
 
 // ------------- feature search --------------
+app.get('/search', (req, res) => {
+    const { user_id, keyword } = req.query;
 
+    if (!user_id || !keyword) {
+        return res.status(400).send("Missing user_id or keyword");
+    }
+
+    const sql = "SELECT * FROM expense WHERE user_id = ? AND item LIKE ?";
+    const searchTerm = `%${keyword}%`;
+
+    con.query(sql, [user_id, searchTerm], (err, results) => {
+        if (err) return res.status(500).send("Database error!");
+        res.json(results);
+    });
+});
 
 // ------------- feature add --------------
 app.post('/expenses', (req, res) => {
